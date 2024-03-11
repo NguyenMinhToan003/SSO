@@ -3,6 +3,7 @@ import homeController from "../controller/homeController";
 import apiController from "../controller/apiController";
 import passport from "passport";
 import loginController from "../controller/loginController";
+import checkUser from "../middleware/checkUser";
 
 const router = express.Router();
 /**
@@ -12,6 +13,7 @@ const router = express.Router();
 
 const initWebRoutes = (app) => {
   //path, handler
+  router.all("*", checkUser.isLogin);
   router.get("/", homeController.handleHelloWord);
   router.get("/user", homeController.handleUserPage);
   router.post("/users/create-user", homeController.handleCreateNewUser);
