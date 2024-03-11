@@ -1,12 +1,13 @@
 import Sequelize from "sequelize";
 import session from "express-session";
 require("dotenv").config();
-const configSection = (app) => {
+import passport from "passport";
+const configSession = (app) => {
   // initalize sequelize with session store
-  var SequelizeStore = require("connect-session-sequelize")(session.Store);
+  const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
   // create database, ensure 'sqlite3' in your package.json
-  var sequelize = new Sequelize(
+  const sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USERNAME,
     process.env.DB_PASSWORD,
@@ -20,18 +21,36 @@ const configSection = (app) => {
     }
   );
 
+  const myStore = new SequelizeStore({
+    db: sequelize,
+  });
   // configure express
-  var app = express();
+
   app.use(
     session({
       secret: "keyboard cat",
-      store: new SequelizeStore({
-        db: sequelize,
-      }),
+      store: myStore,
       resave: false, // we support the touch method so per the express-session docs this should be set to false
+      saveUninitialized: false,
       proxy: true, // if you do SSL outside of node.
     })
   );
+  myStore.sync();
+  app.use(passport.authenticate("session"));
+
+  // ma hoa
+  passport.serializeUser(function (user, cb) {
+    process.nextTick(function () {
+      cb(null, user);
+    });
+  });
+
+  // giai ma
+  passport.deserializeUser(function (user, cb) {
+    process.nextTick(function () {
+      return cb(null, user);
+    });
+  });
 };
 
-export default configSection;
+export default configSession;

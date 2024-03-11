@@ -9,7 +9,7 @@ const configPassport = async () => {
         password: password,
       };
       let respose = await loginRegisterService.handleUserLogin(rawData);
-      console.log(respose);
+
       if (respose && +respose.EC === 0) {
         return cb(null, respose.DT);
       } else return cb(null, false, { message: respose.EM });
