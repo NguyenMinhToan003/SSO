@@ -6,7 +6,7 @@ const configSession = (app) => {
   // initalize sequelize with session store
   const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-  // create database, ensure 'sqlite3' in your package.json
+  // create database
   const sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USERNAME,
@@ -18,6 +18,7 @@ const configSession = (app) => {
       define: {
         freezeTableName: true,
       },
+      timezone: `+07:00`,
     }
   );
 
@@ -33,19 +34,21 @@ const configSession = (app) => {
       resave: false, // we support the touch method so per the express-session docs this should be set to false
       saveUninitialized: false,
       proxy: true, // if you do SSL outside of node.
+      expiration: 200 * 1000,
+      cookie: { expires: 200 * 1000 },
     })
   );
   myStore.sync();
   app.use(passport.authenticate("session"));
 
-  // ma hoa
+  // ma hoa khi nhap vao login
   passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
       cb(null, user);
     });
   });
 
-  // giai ma
+  // giai ma du lieu tren server khi load lai trang so sanh no voi cookie
   passport.deserializeUser(function (user, cb) {
     process.nextTick(function () {
       return cb(null, user);
