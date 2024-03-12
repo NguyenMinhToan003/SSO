@@ -16,7 +16,12 @@ const configPassport = async () => {
     })
   );
 };
-
+const logoutUser = (req, res) => {
+  req.session.destroy();
+  req.logout();
+  res.redirect("/");
+};
 module.exports = {
   configPassport,
+  logoutUser,
 };
