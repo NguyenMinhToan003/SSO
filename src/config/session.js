@@ -36,9 +36,10 @@ const configSession = (app) => {
       proxy: true, // if you do SSL outside of node.
       expiration: 200 * 1000,
       cookie: { expires: 200 * 1000 },
+      checkExpirationInterval: 200 * 1000,
     })
   );
-  myStore.sync();
+  console.log(process.env.SESSION_EXPRIRES), myStore.sync();
   app.use(passport.authenticate("session"));
 
   // ma hoa khi nhap vao login
