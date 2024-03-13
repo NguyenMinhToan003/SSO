@@ -39,7 +39,7 @@ const configSession = (app) => {
       checkExpirationInterval: 200 * 1000,
     })
   );
-  console.log(process.env.SESSION_EXPRIRES), myStore.sync();
+  myStore.sync();
   app.use(passport.authenticate("session"));
 
   // ma hoa khi nhap vao login

@@ -26,13 +26,29 @@ const initWebRoutes = (app) => {
   //GET - R, POST- C, PUT - U, DELETE - D
   router.get("/api/test-api", apiController.testApi);
   router.get("/login", loginController.loginLocal);
-  router.post(
-    "/login",
-    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/login",
-    })
-  );
+  // router.post(
+  //   "/login",
+  //   passport.authenticate("local", {
+  //     successRedirect: "/",
+  //     failureRedirect: "/login",
+  //   })
+  // );
+  app.post("/login", function (req, res, next) {
+    passport.authenticate(`local`, function (error, user, info) {
+      if (error) {
+        return res.status(500).json(error);
+      }
+      if (!user) {
+        return res.status(401).json(info.message);
+      }
+      // luu thong tin vao session -> khong co khong luu passport vao session duoc
+      req.login(user, function (error) {
+        if (error) next(error);
+        return res.status(200).json(user);
+      });
+    })(req, res, next);
+  });
+
   router.post("/logout", PassportController.logoutUser);
 
   return app.use("/", router);

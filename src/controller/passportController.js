@@ -13,11 +13,9 @@ const configPassport = async () => {
           password: password,
         };
         let respose = await loginRegisterService.handleUserLogin(rawData);
-
         if (respose && +respose.EC === 0) {
           return done(null, respose.DT);
-        } else
-          return done(null, false, req.flash("data", [respose.EM, username]));
+        } else return done(null, false, { message: respose.EM });
       }
     )
   );
