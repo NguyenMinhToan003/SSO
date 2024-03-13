@@ -12,6 +12,8 @@ import flash from "connect-flash";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+// use flash message
 app.use(flash());
 //config cors
 configCors(app);
