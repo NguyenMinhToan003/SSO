@@ -18,11 +18,16 @@
       <div class="mt-3 col-4 mx-auto shadow p-3 mb-5 bg-body rounded">
         <h1 class="text-center">Sign in</h1>
         <section>
+          <% if(error!=""){ %>
+          <div class="alert alert-danger" role="alert"><%=error %></div>
+          <% } %>
+
           <label class="form-label">Username</label>
           <input
             class="form-control"
             name="username"
             type="text"
+            value="<%=userName%>"
             required
             autofocus />
           <div class="invalid-feedback">Please choose a username.</div>
